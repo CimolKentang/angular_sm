@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { PostLayoutComponent } from './layouts/post-layout/post-layout.component';
 
 export const routes: Routes = [
   {
@@ -8,6 +9,7 @@ export const routes: Routes = [
   },
   {
     path: 'post',
+    component: PostLayoutComponent,
     loadChildren: () => import('./modules/post/post.module').then(m => m.PostModule)
   },
   {
