@@ -1,1 +1,6 @@
-<p>post-detail works!</p>
+<ng-container *ngIf="post">
+  <div class="border border-info p-1 mt-2">
+    <h3 class="m-0">{{post.user.userName}}</h3>
+    <p class="m-0">{{post.content}}</p>
+  </div>
+</ng-container>
