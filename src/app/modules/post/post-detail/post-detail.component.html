@@ -1,6 +1,26 @@
 <ng-container *ngIf="post">
   <div class="border border-info p-1 mt-2">
-    <h3 class="m-0">{{post.user.userName}}</h3>
+    <div class="d-flex align-items-end mb-1">
+      <h4 class="m-0">{{post.user.userName}}</h4>
+      <span class="ms-2">{{post.createdOn | date : "dd/MM/yyyy HH:mm" : "id"}}</span>
+    </div>
     <p class="m-0">{{post.content}}</p>
+    <div class="mt-2 py-1 border-top border-info">
+      <span>{{post.likes.length}} like{{post.likes.length > 1 ? 's' : ''}}</span>
+    </div>
+  </div>
+  <div class="d-flex align-items-end">
+    <h3 class="px-1 m-0">Comments</h3>
+    <span class="ms-2">({{post.comments.length}})</span>
+  </div>
+  <div 
+    class="border-bottom p-1 mt-2"
+    *ngFor="let comment of post.comments"  
+  >
+    <div class="d-flex align-items-end mb-1">
+      <h4 class="m-0">{{comment.user.userName}}</h4>
+      <span class="ms-2">{{comment.createdOn | date : "dd/MM/yyyy HH:mm" : "id"}}</span>
+    </div>
+    <p class="m-0">{{comment.content}}</p>
   </div>
 </ng-container>

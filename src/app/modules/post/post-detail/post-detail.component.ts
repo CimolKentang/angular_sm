@@ -2,12 +2,12 @@ import { AfterViewInit, Component } from '@angular/core';
 import { Post } from '../../../core/models/post';
 import { ActivatedRoute } from '@angular/router';
 import { PostService } from '../../../core/services/post.service';
-import { NgIf } from '@angular/common';
+import { DatePipe, NgFor, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-post-detail',
   standalone: true,
-  imports: [NgIf],
+  imports: [NgIf, DatePipe,NgFor],
   templateUrl: './post-detail.component.html',
   styleUrl: './post-detail.component.css'
 })
@@ -31,7 +31,6 @@ export class PostDetailComponent implements AfterViewInit {
   getPostById(id: string) {
     this.postService.getPostById(id).subscribe(result => {
       this.post = result;
-      console.log(result);
     })
   }
 }

@@ -1,12 +1,39 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from '../../../core/services/auth.service';
+import { Router } from '@angular/router';
+import { LocalStorageService } from '../../../core/services/local-storage.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
+  loginForm: FormGroup;
 
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private localStorage: LocalStorageService
+  ) {}
+
+  ngOnInit(): void {
+    this.loginForm = this.fb.group({
+      email: ['', Validators.required],
+      password: ['', Validators.required]
+    });
+  }
+
+  get fC() { return this.loginForm.controls }
+
+  submit() {
+    this.authService.login(this.loginForm.getRawValue()).subscribe(result => {
+      this.localStorage.setItem("token", result.token);
+      this.router.navigateByUrl('/post');
+    });
+  }
 }

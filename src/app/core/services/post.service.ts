@@ -21,4 +21,8 @@ export class PostService {
   getPostById(id: string): Observable<Post> {
     return this.http.get(`${this.apiUrl}/${id}`).pipe(map(response => response as Post));
   }
+
+  createPost(body: any): Observable<Post> {
+    return this.http.post(this.apiUrl, body).pipe(map(response => response as Post));
+  }
 }
