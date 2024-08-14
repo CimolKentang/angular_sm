@@ -1,0 +1,59 @@
+i {
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.quiz-container {
+  height: 100%;
+}
+
+.scroll-wrapper {
+  height: 100%;
+}
+
+.scroll-box {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.scroll-box::-webkit-scrollbar {
+  display: none;
+}
+
+.caption-box {
+  width: 75%;
+}
+
+.input-box {
+  position: relative;
+}
+
+input,
+textarea {
+  outline: none;
+  padding: 5px 10px;
+}
+
+.input-box input,
+.input-box textarea {
+  width: 100%;
+}
+
+.input-label {
+  position: absolute;
+  top: 7px;
+  left: 12px;
+  background-color: #fff;
+  transition: .3s;
+  pointer-events: none;
+}
+
+.input-box input:focus ~ span.input-label, 
+.input-box input:valid ~ span.input-label,
+.input-box textarea:focus ~ span.input-label,
+.input-box textarea:valid ~ span.input-label {
+  top: -8px;
+  left: 9px;
+  font-size: 12px;
+  letter-spacing: 1px;
+}

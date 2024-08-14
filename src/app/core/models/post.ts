@@ -7,6 +7,7 @@ export class Post {
   content: string;
   createdOn: Date;
   comments: [Comment];
+  images: string;
   likes: [Like];
   userId: string;
   user: User;

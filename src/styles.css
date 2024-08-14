@@ -1,11 +1,43 @@
-/* You can add global styles to this file, and also import other style files */
-p, h1, h2, h3, h4, h5 , h6 {
-  padding: 0 !important;
-  margin: 0 !important;
+html {
+  scroll-behavior: smooth;
 }
 
-body, div {
-  box-sizing: border-box !important;
+html, body {
+  height: 100%;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Helvetica';
+}
+
+p, span, div {
+  font-size: 16px;
+}
+
+button {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+textarea, input {
+  font-size: 16px;
+  font-family: 'Helvetica';
+  outline: none;
 }
 
 .cursor-pointer {

@@ -1,0 +1,42 @@
+<div class="border border-info">
+  <div class="p-1">
+    <div class="d-flex align-items-center justify-content-between mb-1">
+      <div class="d-flex align-items-end">
+        <h4 class="m-0">{{post.user.userName}}</h4>
+        <span class="ms-2">{{post.createdOn | date : "dd/MM/yyyy HH:mm" : "id"}}</span>
+      </div>
+      <ng-container *ngIf="post.userId == userId">
+        <button class="btn btn-sm btn-danger" (click)="deletePost()">
+          <i class="bi bi-trash3-fill text-light"></i>
+        </button>
+      </ng-container>
+    </div>
+    <p class="m-0">{{post.content}}</p>
+    <div *ngIf="post.images" class="mt-2">
+      <img [src]="imagesUrl + '/' + post.images" alt="">
+    </div>
+  </div>
+  <div class="border-top border-info row m-0">
+    <div 
+      class="col-6 border-end border-info p-1 m-0"
+      [ngClass]="{
+        'cursor-pointer': !isDetail
+      }"
+      (click)="goToDetail()"
+    >
+      {{post.comments.length}} comment
+    </div>
+    <div 
+      class="col-6 m-0 p-1 cursor-pointer"
+      (click)="likePost()"  
+    >
+      <ng-container *ngIf="!myLike">
+        <i class="bi bi-hand-thumbs-up"></i>
+      </ng-container>
+      <ng-container *ngIf="myLike">
+        <i class="bi bi-hand-thumbs-up-fill"></i>
+      </ng-container>
+      {{post.likes.length}} like
+    </div>
+  </div>
+</div>

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
+import { User } from '../../../core/models/user';
 
 @Component({
   selector: 'app-login',
@@ -32,6 +33,12 @@ export class LoginComponent implements OnInit {
 
   submit() {
     this.authService.login(this.loginForm.getRawValue()).subscribe(result => {
+      const user = new User;
+      user.id = result.id;
+      user.email = result.email;
+      user.userName = result.userName;
+
+      this.localStorage.setItem("user", JSON.stringify(user));
       this.localStorage.setItem("token", result.token);
       this.router.navigateByUrl('/post');
     });

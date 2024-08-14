@@ -2,7 +2,19 @@
   <form [formGroup]="postForm" novalidate (submit)="submit()">
     <div class="mb-3">
       <label for="text" class="form-label">Content</label>
-      <input type="text" class="form-control" formControlName="content" id="text">
+      <textarea 
+        type="text" 
+        class="form-control" 
+        formControlName="content" 
+        id="text"
+        rows="2"
+      ></textarea>
+    </div>
+    <ng-container *ngIf="selectedImageUrl">
+      <img class="mb-3" [src]="selectedImageUrl" alt="selected image">
+    </ng-container>
+    <div class="mb-3">
+      <input type="file" class="form-control" accept="image/jpg, image/png, image/jpeg" id="image" (change)="selectImage($event)" />
     </div>
     <button type="button" class="btn btn-primary" (click)="submit()">Submit</button>
   </form>
@@ -10,35 +22,14 @@
 
 <ng-container *ngIf="posts && posts.length > 0">
   <div 
-    *ngFor="let post of posts; index as i"
-    class="border border-info"
-    [ngClass]="{
-      'mt-2 mb-1': i === 0,
-      'my-1': i !== 0
-    }"
+    *ngFor="let post of posts"
+    class="my-2"  
   >
-    <div class="row m-0">
-      <div class="col-10 m-0 p-1">
-        <div class="d-flex align-items-end mb-1">
-          <h4 class="m-0">{{post.user.userName}}</h4>
-          <span class="ms-2">{{post.createdOn | date : "dd/MM/yyyy HH:mm" : "id"}}</span>
-        </div>
-        <p class="m-0">{{post.content}}</p>
-      </div>
-      <div 
-        class="col-2 m-0 border-start border-info cursor-pointer"
-        (click)="goToDetail(post.postId)"  
-      >
-        <div class="p-1">
-          <h3 class="text-center">{{post.comments.length}}</h3>
-          <p class="m-0 text-center">comment{{post.comments.length > 1 ? 's' : ''}}</p>
-        </div>
-        <div class="p-1">
-          <h3 class="text-center">{{post.likes.length}}</h3>
-          <p class="m-0 text-center">like{{post.likes.length > 1 ? 's' : ''}}</p>
-        </div>
-      </div>
-    </div>
+    <app-post-container
+      [post]="post"
+      [userId]="user.id"
+      (onDelete)="deletePost($event)"
+    ></app-post-container>
   </div>
 </ng-container>
 
