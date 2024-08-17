@@ -1,0 +1,12 @@
+<label for="{{ id }}">
+  <input 
+    type="radio" 
+    class="{{ class }}"
+    id="{{ id }}" 
+    [name]="name" 
+    [value]="value" 
+    [checked]="checked"
+    (click)="changeValue()" 
+  />
+  <div class="radio"></div>
+</label>

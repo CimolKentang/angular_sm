@@ -1,0 +1,33 @@
+input[type="radio"] {
+  display: none;
+}
+
+.radio {
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  border: 2px #00aeef solid;
+  cursor: pointer;
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+  position: relative;
+}
+
+.radio::after {
+  content: "";
+  height: 7px;
+  width: 7px;
+  border-radius: 4px;
+  background-color: #00aeef;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: scale(0) translate(-50%, -50%);
+  /* transform: scale(0); */
+  transition: .3s;
+}
+
+input[type="radio"]:checked ~ div.radio::after {
+  transform: scale(1) translate(-50%, -50%);
+}

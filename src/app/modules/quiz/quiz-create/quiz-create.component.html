@@ -1,4 +1,7 @@
 <div class="quiz-container">
+  <div class="indicator-box" [ngStyle]="{'top': scrollBarTop + 'px'}">
+    <div #scroll class="bg-info" style="height: 100%; transition: .1s;"></div>
+  </div>
   <div 
     class="row m-0 scroll-wrapper"
     [ngClass]="{
@@ -6,7 +9,12 @@
       'justify-content-center': isCaptionForm
     }"  
   >
-    <div class="col-6 p-0 scroll-box py-3">
+    <div 
+      #container 
+      class="col-6 p-0 scroll-box py-3" 
+      (scroll)="onScroll()"
+      (scrollend)="isQuestionSelected = false"
+    >
       <form [formGroup]="quizForm" novalidate>
         <!-- Caption -->
         <div class="border p-2" *ngIf="isCaptionForm">
@@ -32,22 +40,106 @@
         <ng-container *ngIf="!isCaptionForm">
           <div formArrayName="quizes">
             <ng-container *ngFor="let quiz of quizes.controls; index as i">
-              <div class="border p-2" [class.mt-2]="i != 0">
-                <div class="d-flex justify-content-between">
-                  <h5>Pertanyaan {{i + 1}}</h5>
-                  <i class="bi bi-trash3-fill text-danger" (click)="deleteQuestion(i)"></i>
+              <ng-container *ngIf="scrollMode">
+                <div [class.pt-2]="i != 0" #questions>
+                  <div class="border p-2">
+                    <div class="d-flex justify-content-between">
+                      <h5>Pertanyaan {{i + 1}}</h5>
+                      <i class="bi bi-trash3-fill text-danger" (click)="deleteQuestion(i)"></i>
+                    </div>
+                    <textarea 
+                      rows="3" 
+                      class="w-100" 
+                      placeholder="Tulis pertanyaan di sini..."
+                      [formControl]="quiz.get('question')"
+                    ></textarea>
+                    <p class="text-danger" *ngIf="quiz.get('question').invalid && (quiz.get('question').touched || quiz.get('question').dirty)">
+                      Pertanyaan harus diisi!
+                    </p>
+      
+                    <div *ngFor="let answer of getAnswers(i).controls; index as j" class="mb-2 mt-1">
+                      <!-- <input type="radio" class="me-2" name="question-{{i}}" (change)="assignAnswer(i, j)" /> -->
+                      <app-radio-button
+                        name="question-{{i}}"
+                        value="{{j}}"
+                        class="me-1"
+                        id="answer-{{i}}-{{j}}"
+                        [checked]="checkAnswer(i, j)"
+                        (onSelect)="assignAnswer(i, $event)"
+                      ></app-radio-button>
+                      <input 
+                        type="text" 
+                        class="answer" 
+                        placeholder="Jawaban {{j + 1}}" 
+                        [formControl]="answer" 
+                      />
+                      <i class="bi bi-x-lg ms-2 text-danger" (click)="deleteAnswer(i, j)"></i>
+                      <p class="text-danger" *ngIf="answer.invalid && (answer.touched || answer.dirty)">
+                        Jawaban harus diisi!
+                      </p>
+                    </div>
+      
+                    <p class="fw-bold mb-2">Jawaban: <span class="fw-light">{{getAnswer(i)}}</span></p>
+      
+                    <button (click)="addAnswer(i)">Add Answer</button>
+                  </div>
                 </div>
-                <textarea rows="3" class="w-100 mb-1" placeholder="Tulis pertanyaan di sini..."></textarea>
-  
-                <div *ngFor="let answer of getAnswers(i).controls; index as j" class="mb-2">
-                  <input type="text" placeholder="Jawaban {{j + 1}}" [formControl]="answer" />
-                  <i class="bi bi-x-lg ms-2 text-danger" (click)="deleteAnswer(i, j)"></i>
+              </ng-container>
+
+              <ng-container *ngIf="!scrollMode && questionNum == i">
+                <div #questions>
+                  <div class="border p-2">
+                    <div class="d-flex justify-content-between">
+                      <h5>Pertanyaan {{i + 1}}</h5>
+                      <i class="bi bi-trash3-fill text-danger" (click)="deleteQuestion(i)"></i>
+                    </div>
+                    <textarea 
+                      rows="3" 
+                      class="w-100" 
+                      placeholder="Tulis pertanyaan di sini..."
+                      [formControl]="quiz.get('question')"
+                    ></textarea>
+                    <p class="text-danger" *ngIf="quiz.get('question').invalid && (quiz.get('question').touched || quiz.get('question').dirty)">
+                      Pertanyaan harus diisi!
+                    </p>
+      
+                    <div *ngFor="let answer of getAnswers(i).controls; index as j" class="mb-2 mt-1">
+                      <!-- <input type="radio" class="me-2" name="question-{{i}}" (change)="assignAnswer(i, j)" /> -->
+                      <app-radio-button
+                        name="question-{{i}}"
+                        value="{{j}}"
+                        class="me-1"
+                        id="answer-{{i}}-{{j}}"
+                        [checked]="checkAnswer(i, j)"
+                        (onSelect)="assignAnswer(i, $event)"
+                      ></app-radio-button>
+                      <input 
+                        type="text" 
+                        class="answer" 
+                        placeholder="Jawaban {{j + 1}}" 
+                        [formControl]="answer" 
+                      />
+                      <i class="bi bi-x-lg ms-2 text-danger" (click)="deleteAnswer(i, j)"></i>
+                      <p class="text-danger" *ngIf="answer.invalid && (answer.touched || answer.dirty)">
+                        Jawaban harus diisi!
+                      </p>
+                    </div>
+      
+                    <p class="fw-bold mb-2">Jawaban: <span class="fw-light">{{getAnswer(i)}}</span></p>
+      
+                    <button (click)="addAnswer(i)" class="me-2">Add Answer</button>
+                    <button 
+                      class="me-2"
+                      [disabled]="i == 0"
+                      (click)="questionNum = questionNum - 1" 
+                    >Previous</button>
+                    <button
+                      [disabled]="i == quizes.controls.length - 1" 
+                      (click)="questionNum = questionNum + 1"
+                    >Next</button>
+                  </div>
                 </div>
-  
-                <p class="fw-bold mb-2">Jawaban: </p>
-  
-                <button (click)="addAnswer(i)">Add Answer</button>
-              </div>
+              </ng-container>
             </ng-container>
           </div>
         </ng-container>
@@ -56,14 +148,24 @@
 
     <div class="col-3 px-2 py-3" *ngIf="!isCaptionForm">
       <div class="row border m-0 pt-2 ps-2 mb-2">
-        <div class="col-3 p-0 mb-2 me-2" *ngFor="let quiz of quizes.controls; index as i">
-          <div class="border py-1 text-center">{{i + 1}}</div>
+        <div class="col-3 p-0 mb-2 pe-2" *ngFor="let quiz of quizes.controls; index as i">
+          <div 
+            class="border py-1 d-flex justify-content-center align-items-center cursor-pointer"
+            [ngClass]="{
+              'bg-danger text-white': questionNum == i
+            }" 
+            (click)="scrollTo(i)"
+          >
+            <span>{{i + 1}}</span>
+            <i *ngIf="questionHasAnswer(i)" class="bi bi-check2 text-success ms-1"></i>
+          </div>
         </div>
       </div>
 
       <button (click)="addQuestion()" class="me-2 mb-2">Add Question</button>
-      <button (click)="submit()" class="mb-2">Submit</button>
-      <button (click)="goToQuestionForms()">Back to Caption</button>
+      <button (click)="goToQuestionForms()" class="me-2 mb-2">Back to Caption</button>
+      <button (click)="changeMode()" class="me-2 mb-2">Change Mode</button>
+      <button (click)="submit()" [disabled]="quizForm.invalid" class="me-2 mb-2">Submit</button>
     </div>
 
   </div>
